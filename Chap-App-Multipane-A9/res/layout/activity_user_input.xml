@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ui_LinearLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+    tools:context=".UserInput" >
+    
+    <LinearLayout
+        android:id="@+id/ui_linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" 
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/ui_user_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/user_name"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/ui_user_text"
+            android:layout_width="188dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:singleLine="true"
+            android:hint="@string/user_name_default">
+            <requestFocus />
+		</EditText>
+             
+    </LinearLayout>    
+    
+    <LinearLayout
+        android:id="@+id/ui_linearLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" 
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/ui_latitude_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/latitude"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/ui_latitude"
+            android:layout_width="188dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:singleLine="true"            
+            android:text="@string/latitude_default">
+        </EditText>
+        
+	</LinearLayout>
+	
+    <LinearLayout
+        android:id="@+id/ui_linearLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" 
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/ui_longitude_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/longitude"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+                
+        <EditText
+            android:id="@+id/ui_longitude"
+            android:layout_width="188dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:singleLine="true"             
+            android:text="@string/longitude_default" />
+        
+	</LinearLayout>	
+	
+    <LinearLayout
+        android:id="@+id/ui_linearLayout5"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" 
+        android:orientation="horizontal">
+                    
+        <Button
+        	android:id="@+id/ui_send_button1"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:text="@string/send_label" 
+        	android:onClick="callChatClient" />
+
+    </LinearLayout>    
+
+</LinearLayout>
+
+<!-- <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserInput" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/hello_world" />
+
+</RelativeLayout>-->
