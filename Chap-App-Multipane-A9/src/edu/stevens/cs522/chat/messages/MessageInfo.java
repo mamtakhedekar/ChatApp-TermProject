@@ -9,59 +9,68 @@
 package edu.stevens.cs522.chat.messages;
 
 import java.io.Serializable;
-import java.net.InetAddress;
 
-public class MessageInfo implements Serializable {
+import edu.stevens.cs522.chat.location.Coordinates;
+import edu.stevens.cs522.chat.location.DestCoordinates;
+import edu.stevens.cs522.chat.location.SourceCoordinates;
+
+public abstract class MessageInfo implements Serializable {
 
 	private static final long serialVersionUID = -6050463241441669252L;
-
-	private String sender;
-	private InetAddress address;
-	private int servicePort;
-	private double latitude;
-	private double longitude;
-	private String message;
-
-	public String getSender() {
-		return sender;
-	}
-
-	public int getPort() {
-		return servicePort;
+	
+	public static enum MessageType {
+		TEXT("text"),
+		BROADCAST("broadcast"),
+		CHATROOM_NOTIFY("notify"),
+		LOCAL_CHECKIN("localCheckIn"),
+		LOCAL_CHECKOUT("localCheckOut"),
+		GLOBAL_CHECKIN("globalCheckIn"),
+		GLOBAL_CHECKOUT("globalCheckOut"),
+		LOCAL_PEERS("localPeers"),
+		GLOBAL_BROADCASTS("globalBroadcasts");
+		private String value;
+		public String value() {
+			return value;
+		}
+		public static MessageType fromString(String v) {
+			for (MessageType mtype : values()) {
+				if (mtype.value.equals(v)) {
+					return mtype;
+				}
+			}
+			return null;
+		}
+		private MessageType(String v) {
+			value = v;
+		}
 	}
 	
-	public void setPort(int port) {
-		this.servicePort = port;
+	private MessageType messageType;
+	
+	public MessageType getMessageType() {
+		return messageType;
 	}
 
-	public double getLatitude() {
-		return latitude;
+	private Coordinates coordinates;
+	
+	public Coordinates getCoordinates() {
+		return coordinates;
+	}
+	
+	public DestCoordinates getDestCoordinates() {
+		return (DestCoordinates)coordinates;
+	}
+	
+	public SourceCoordinates getSourceCoordinates() {
+		return (SourceCoordinates)coordinates;
 	}
 
-	public double getLongitude() {
-		return longitude;
+	public void setCoordinates(Coordinates coordinates) {
+		this.coordinates = coordinates;
 	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public InetAddress getAddress() {
-		return address;
-	}
-
-	public void setAddress(InetAddress addr) {
-		address = addr;
-	}
-
-	public MessageInfo(String s, InetAddress a, int p, double lat, double lng,
-			String m) {
-		sender = s;
-		address = a;
-		servicePort = p;
-		latitude = lat;
-		longitude = lng;
-		message = m;
+	
+	public MessageInfo(MessageType messageType) {
+		this.messageType = messageType;
 	}
 
 }
