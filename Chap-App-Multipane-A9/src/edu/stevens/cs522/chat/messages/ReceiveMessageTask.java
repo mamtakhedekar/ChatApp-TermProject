@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 import edu.stevens.cs522.chat.providers.ChatContent;
+import edu.stevens.cs522.chat.service.LocalServiceProcessor;
 import edu.stevens.cs522.chat.ui.ChatRoomDetailActivity;
 import edu.stevens.cs522.chat.ui.ChatRoomListActivity;
 
@@ -28,6 +29,7 @@ class ReceiveMessageTask extends AsyncTask<Void, MessageInfo, Void> {
 	private final static String TAG = ReceiveMessageTask.class.getCanonicalName();
 	
 	private final ChatService chatService;
+	private MessageProcessor processor;
 	
 	private ChatService getService() {
 		return chatService;
@@ -38,6 +40,7 @@ class ReceiveMessageTask extends AsyncTask<Void, MessageInfo, Void> {
 	 */
 	ReceiveMessageTask(ChatService chatService) {
 		this.chatService = chatService;
+		processor = new MessageProcessor();
 	}
 
 	@Override
@@ -51,58 +54,42 @@ class ReceiveMessageTask extends AsyncTask<Void, MessageInfo, Void> {
 
 		try {
 			while (true) {
-				MessageInfo msg = getService().nextMessage();
-				this.addReceivedMessage(msg);
-				this.addSender(msg);
-				publishProgress(msg);
+				while (true) {
+					MessageInfo msg = getService().nextMessage();
+					ProcessReceivedMessage(msg);
+					publishProgress(msg);
+				}
 			}
 		} catch (IOException e) {
 			Log.i(TAG, "Socket closed, shutting down background thread: " + e);
 		}
 		return ((Void) null);
 	}
-
-	private void addReceivedMessage(MessageInfo msg) {
-		/*
-		 * Add sender and message to the content provider for received messages.
-		 */
-		ContentValues values = new ContentValues();
-		values.put(ChatContent.Messages.SENDER, msg.getSender());
-		values.put(ChatContent.Messages.MESSAGE, msg.getMessage());
-		ContentResolver cr = getService().getContentResolver();
-		cr.insert(ChatContent.Messages.CONTENT_URI, values);
+	
+	public void ProcessReceivedMessage(MessageInfo msg) {
 		
-	}
-
-	private void addSender(MessageInfo msg) {
-
-		/*
-		 * Add sender information to content provider for peers
-		 * information, if we have not already heard from them. If repeat
-		 * message, update location information.
-		 */
-		ContentValues values = new ContentValues();
-		values.put(ChatContent.Peers.NAME, msg.getSender());
-		values.put(ChatContent.Peers.HOST, msg.getAddress().getHostAddress());
-		values.put(ChatContent.Peers.PORT, msg.getPort());
-		values.put(ChatContent.Peers.LATITUDE, msg.getLatitude());
-		values.put(ChatContent.Peers.LONGITUDE, msg.getLongitude());
-
-		String[] projection = new String[] { ChatContent.Peers.NAME };
-		String where = ChatContent.Peers.NAME + "= ?";
-		String[] selectionArgs = new String[] { msg.getSender() };
-
-		ContentResolver cr = getService().getContentResolver();
-		Cursor c = cr.query(ChatContent.Peers.CONTENT_URI, projection, where,
-				selectionArgs, null);
-		if (!c.moveToFirst()) {
-			cr.insert(ChatContent.Peers.CONTENT_URI, values);
-		} else {
-			cr.update(ChatContent.Peers.CONTENT_URI, values, where,
-					selectionArgs);
+		switch(msg.getMessageType())
+		{
+		case LOCAL_CHECKIN:
+			processor.checkIn(chatService, msg);
+			break;
+		case LOCAL_CHECKOUT:
+			processor.checkOut(chatService, msg);
+			break;
+		case TEXT:
+			processor.addNewText(chatService, msg);
+			break;
+		case BROADCAST:
+			processor.addBroadcastMsg(chatService, msg);
+		case LOCAL_PEERS:
+			processor.sendLocalPeers(msg);
+			break;
+		default:
+			// Dont process
+			break;
 		}
 	}
-
+		
 	@Override
 	protected void onProgressUpdate(MessageInfo... values) {
 		/*

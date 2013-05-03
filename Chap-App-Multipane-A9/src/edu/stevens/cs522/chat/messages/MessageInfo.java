@@ -28,10 +28,13 @@ public abstract class MessageInfo implements Serializable {
 		GLOBAL_CHECKOUT("globalCheckOut"),
 		LOCAL_PEERS("localPeers"),
 		GLOBAL_BROADCASTS("globalBroadcasts");
+		
 		private String value;
+		
 		public String value() {
 			return value;
 		}
+		
 		public static MessageType fromString(String v) {
 			for (MessageType mtype : values()) {
 				if (mtype.value.equals(v)) {
@@ -40,6 +43,7 @@ public abstract class MessageInfo implements Serializable {
 			}
 			return null;
 		}
+		
 		private MessageType(String v) {
 			value = v;
 		}
@@ -73,4 +77,15 @@ public abstract class MessageInfo implements Serializable {
 		this.messageType = messageType;
 	}
 
+	private String name;
+	
+	public void setName(String pname )
+	{
+		name = pname;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
 }
