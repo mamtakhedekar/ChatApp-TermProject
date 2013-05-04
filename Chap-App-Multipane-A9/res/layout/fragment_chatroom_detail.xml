@@ -54,7 +54,7 @@
             android:singleLine="true"
             android:text="@string/target_port_default" />
              
-    </LinearLayout>
+    </LinearLayout>    
 
     <LinearLayout
         android:id="@+id/linearLayout3"

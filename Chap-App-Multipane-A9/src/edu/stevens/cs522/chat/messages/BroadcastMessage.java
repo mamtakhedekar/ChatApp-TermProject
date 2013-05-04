@@ -1,5 +1,6 @@
 package edu.stevens.cs522.chat.messages;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,5 +77,7 @@ public class BroadcastMessage extends MessageInfo {
 		this(chatSender, chatroom, owner, seqNumber, text);
 		this.tags.add(tag);
 	}
+
+
 
 }

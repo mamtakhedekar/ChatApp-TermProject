@@ -2,6 +2,7 @@
 <resources>
 
     <string name="title_chatroom_detail">Chat Room Detail</string>
+    <string name="title_topic_registration">Topic Registration</string>    
     
     <string name="app_name">Chat App</string>
     <string name="user_name">Client</string>
@@ -18,13 +19,17 @@
     <string name="LONGITUDE">longi</string>    
     
     <!-- String literals in the UI -->
+    <string name="register_menu_label">Register</string>
+    <string name="topic_register">Register for a Topic</string>
     <string name="destination_host">Destination Host</string>
     <string name="target_host_default">10.0.2.2</string>
     <string name="destination_port">Destination Port</string>
     <string name="target_port_default">6666</string>
     <string name="message_edit_text">Type your message here.</string>
     <string name="send_label">SEND</string>
+    <string name="register_button_label">REGISTER</string>    
     <string name="show_peers">SHOW PEERS</string>
+    <string name="back">BACK</string>
     
 
 </resources>

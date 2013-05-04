@@ -5,5 +5,11 @@
         android:orderInCategory="100"
         android:showAsAction="ifRoom|withText"
         android:title="@string/show_peers"/>
-
+    
+    <item
+        android:id="@+id/register_topic"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/register_menu_label"/>    
+    
 </menu>

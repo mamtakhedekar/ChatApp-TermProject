@@ -16,6 +16,9 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 /**
  * An activity representing a list of ChatRooms. This activity has different
@@ -105,6 +108,29 @@ public class ChatRoomListActivity extends Activity implements
 		rooms.checkAndAddRoom("PermitRoom");
 		// To Do: If exposing deep links into your app, handle intents here.
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+
+		// TODO: Add menu for Register
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main, menu);		
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
+
+		switch (item.getItemId()) {
+		case (R.id.register_topic):
+			Intent registrationIntent = new Intent(this, TopicRegistrationActivity.class);
+			startActivity(registrationIntent);
+			return true;
+		}
+		return false;
+	}	
 
 	private Chatrooms rooms;
 
@@ -129,7 +155,7 @@ public class ChatRoomListActivity extends Activity implements
 			UserInputFragment fragment = new UserInputFragment();
 			fragment.setArguments(arguments);
 			getFragmentManager().beginTransaction()
-					.replace(R.id.chatroom_detail_container, fragment).commitAllowingStateLoss();			
+					.replace(R.id.chatroom_detail_container, fragment).commit();			
 
 		} else {
 			// In single-pane mode, simply start the detail activity
@@ -206,4 +232,15 @@ public class ChatRoomListActivity extends Activity implements
 			 */
 		}
 	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	    // Always call the superclass so it can save the view hierarchy state
+	    super.onSaveInstanceState(savedInstanceState);
+	}
+	
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+	    // Always call the superclass so it can restore the view hierarchy
+	    super.onRestoreInstanceState(savedInstanceState);
+	}	
 }

@@ -34,8 +34,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.ChatRoomListActivity" />
         </activity>
+        <activity
+            android:name=".ui.TopicRegistrationActivity"
+            android:label="@string/title_topic_registration"
+            android:parentActivityName=".ui.ChatRoomListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.ChatRoomListActivity" />
+        </activity>        
  
-               <provider
+		<provider
             android:name=".providers.MessageProvider"
             android:authorities="edu.stevens.cs522.chat.service.messages"
             android:exported="false" />

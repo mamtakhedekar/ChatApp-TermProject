@@ -19,10 +19,21 @@ public class MessageUtils {
 
 		double latitude = Double.parseDouble(lati);			//context.getString(R.string.latitude));
 
-		MessageInfo msg = new MessageInfo(sender, addr, port, longitude,
-				latitude, message);
+		//BroadcastMessage msg = new BroadcastMessage(sender, addr, port, longitude,
+		//		latitude, message);
 
-		service.send(msg);
+		//service.send(msg);
 	}
-
+	
+	public static void sendCheckInMessage(Context context, IChatService service, 
+			LocalCheckInMessage checkInMessage )
+	{
+		service.send(checkInMessage);
+	}
+	
+	public static void sendCheckOutMessage(Context context, IChatService service, 
+			LocalCheckOutMessage checkOutMessage )
+	{
+		service.send(checkOutMessage);
+	}
 }

@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -77,7 +78,7 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 		latitude_val = getArguments().getString(getResources().getString(R.string.LATITUDE));
 		user_name_val = getArguments().getString(getResources().getString(R.string.UNAME));
 
-	}
+	}	
 
 	private ISendMessage sender;
 
@@ -143,7 +144,7 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 		 */
 
 		send = (Button) rootView.findViewById(R.id.send_button);
-		send.setOnClickListener(sendListener);
+		send.setOnClickListener(sendListener);		
 
 		return rootView;
 	}
@@ -160,6 +161,7 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 	private EditText destPort;
 	private EditText message;
 	private Button send;
+	private Button register;
 
 	/*
 	 * On click listener for the send button
@@ -169,7 +171,23 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 			postMessage();
 		}
 	};
-
+	
+	/*
+	 * On click listener for the register button
+	 */
+	private OnClickListener registerListener = new OnClickListener() {
+		public void onClick(View v) {
+			registerTopic();
+		}
+	};
+	
+	
+	/*
+	 * Open registration fragment
+	 */
+	private void registerTopic() {	
+	}
+	
 	/*
 	 * Send the message in the msg EditText
 	 */

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -182,6 +183,7 @@ public class ChatRoomListFragment extends ListFragment {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
+		outState.putString("WORKAROUND_FOR_BUG_19917_KEY", "WORKAROUND_FOR_BUG_19917_VALUE");
 		super.onSaveInstanceState(outState);
 		if (activatedPosition != ListView.INVALID_POSITION) {
 			// Serialize and persist the activated item position.
@@ -235,5 +237,15 @@ public class ChatRoomListFragment extends ListFragment {
 	    }
 
 	  }*/	
+	void addFragmentToStack() {
+	    //mStackLevel++;
+
+	    // Add the fragment to the activity, pushing this transaction
+	    // on to the back stack.
+	    FragmentTransaction ft = getFragmentManager().beginTransaction();
+	    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+	    ft.addToBackStack(null);
+	    ft.commit();
+	}
 }
 
