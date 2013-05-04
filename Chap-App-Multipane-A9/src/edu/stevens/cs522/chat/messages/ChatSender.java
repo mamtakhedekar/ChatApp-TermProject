@@ -53,9 +53,9 @@ public class ChatSender implements Handler.Callback{
 			/*
 			 * Extract destination address information.
 			 */
-			InetAddress destAddr = message.getAddress();
-			int destPort = message.getPort();
-			message.setAddress(null);
+			InetAddress destAddr = message.getDestCoordinates().getAddress();
+			int destPort = message.getDestCoordinates().getServicePort();
+			//message.setAddress(null);
 			/*
 			 * Marshall the message to JSON data.
 			 */

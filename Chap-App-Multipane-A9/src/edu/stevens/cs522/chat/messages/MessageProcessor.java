@@ -1,11 +1,16 @@
 package edu.stevens.cs522.chat.messages;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
+
+import org.apache.http.conn.util.InetAddressUtils;
 
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.util.Log;
 import edu.stevens.cs522.chat.location.SourceCoordinates;
 import edu.stevens.cs522.chat.providers.ChatContent;
 
@@ -95,6 +100,64 @@ public class MessageProcessor {
 
 		addReceivedMessage(srv, textMsg);
 		addSender(srv, textMsg);
+		
+		pushOutMessageToPeers(srv, textMsg);
+	}
+	
+	private void pushOutMessageToPeers(Service srv, TextMessage msg)
+	{
+		ContentValues values = new ContentValues();
+		values.put(ChatContent.Chatrooms.NAME, msg.getChatroomName());
+		values.put(ChatContent.Chatrooms.OWNER, "SELF");
+		
+		ContentResolver cr = srv.getContentResolver();
+		String[] projection = new String[] { ChatContent.Peers.NAME };
+		String where = ChatContent.Chatrooms.NAME + "= ?";
+		String[] selectionArgs = new String[] { msg.getChatroomName() };
+
+		Cursor c = cr.query(ChatContent.Chatrooms.CONTENT_URI, projection, where,
+				selectionArgs, null);
+		
+		if (c.moveToFirst()) {
+			List<String> peers = ChatContent.Chatrooms.getSubscribers(c);
+			
+			for (String peerName : peers) {
+
+				values.put(ChatContent.Peers.NAME, peerName);
+				
+				String[] peer_projection = new String[] { ChatContent.Peers.NAME };
+				String peer_where = ChatContent.Peers.NAME + "= ?";
+				String[] peer_selectionArgs = new String[] { peerName };
+
+				Cursor peer_c = cr.query(ChatContent.Peers.CONTENT_URI, peer_projection, peer_where,
+						peer_selectionArgs, null);
+				
+				if (peer_c .moveToFirst())
+				{
+					String host = ChatContent.Peers.getHost(peer_c);
+					int port = ChatContent.Peers.getPort(peer_c);
+					
+					BroadcastMessage bcastMsg = 
+							new BroadcastMessage(
+									msg.getName(), 
+									msg.getChatroomName(), 
+									msg.getChatroomOwner(), 
+									1, msg.getText());
+					
+					try {
+						bcastMsg.getDestCoordinates().setAddress(InetAddress.getByName(host));
+						bcastMsg.getDestCoordinates().setServicePort(port);
+						((ChatService)srv).send(bcastMsg);
+					} catch (Exception ex) {
+						Log.e("S", ex.getStackTrace().toString() + ex.getMessage());
+					}
+				}
+
+			}
+			
+		} 
+		
+		
 	}
 	
 	private void addReceivedMessage(Service srv, TextMessage msg) {

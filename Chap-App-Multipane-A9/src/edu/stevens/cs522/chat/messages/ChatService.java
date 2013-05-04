@@ -171,10 +171,7 @@ public class ChatService extends Service implements IChatService{
 		
 		//MessageInfo message = gson.fromJson(new String(receivePacket.getData()), MessageInfo.class);
 		
-		message.setAddress(sourceIPAddress);
-		message.setPort(sourcePort);
-
-		Log.d(TAG, "Received from " + message.getSender() + ": " + message.getMessage());
+		Log.d(TAG, "Received from " + message.getName());
 		return message;
 
 	}
