@@ -4,18 +4,13 @@ import java.io.IOException;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 import edu.stevens.cs522.chat.messages.MessageInfo.MessageType;
-import edu.stevens.cs522.chat.providers.ChatContent;
 import edu.stevens.cs522.chat.ui.ChatRoomDetailActivity;
-import edu.stevens.cs522.chat.ui.ChatRoomListActivity;
 
 /*
  * The description of the logic that is performed on a background thread.

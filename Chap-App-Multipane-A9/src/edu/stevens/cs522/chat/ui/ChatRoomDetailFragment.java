@@ -161,7 +161,7 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 	private EditText destPort;
 	private EditText message;
 	private Button send;
-	private Button register;
+	
 
 	/*
 	 * On click listener for the send button
@@ -171,22 +171,6 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 			postMessage();
 		}
 	};
-	
-	/*
-	 * On click listener for the register button
-	 */
-	private OnClickListener registerListener = new OnClickListener() {
-		public void onClick(View v) {
-			registerTopic();
-		}
-	};
-	
-	
-	/*
-	 * Open registration fragment
-	 */
-	private void registerTopic() {	
-	}
 	
 	/*
 	 * Send the message in the msg EditText

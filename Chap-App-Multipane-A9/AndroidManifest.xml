@@ -44,7 +44,7 @@
         </activity>        
  
 		<provider
-            android:name=".providers.MessageProvider"
+            android:name="edu.stevens.cs522.chat.providers.MessageProvider_old"
             android:authorities="edu.stevens.cs522.chat.service.messages"
             android:exported="false" />
         <provider

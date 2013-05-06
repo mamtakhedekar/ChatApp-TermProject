@@ -1,6 +1,10 @@
 package edu.stevens.cs522.chat.messages;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+import edu.stevens.cs522.chat.location.Coordinates;
+import edu.stevens.cs522.chat.location.DestCoordinates;
 
 import android.content.Context;
 
@@ -25,15 +29,64 @@ public class MessageUtils {
 		//service.send(msg);
 	}
 	
-	public static void sendCheckInMessage(Context context, IChatService service, 
-			LocalCheckInMessage checkInMessage )
+	public static void sendTextMsg(Context context, IChatService service,
+			String ipAddr, int port, String roomName, String userName, String textMessage) 
 	{
-		service.send(checkInMessage);
+		TextMessage txtMsg = new TextMessage(roomName, "", textMessage);
+		txtMsg.setName(userName);
+		Coordinates coordinates = new DestCoordinates();
+		try {
+			coordinates.setAddress(InetAddress.getByName(ipAddr));
+			coordinates.setServicePort(port);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
+		txtMsg.setCoordinates(coordinates);
+		sendMessage(context, service, txtMsg);
+	}
+
+	public static void sendLogInMessageToRoom( Context context, IChatService service,
+			String ipAddr, int port, String roomName, String userName)
+	{
+		LocalCheckInMessage checkInMsg = new LocalCheckInMessage();
+		checkInMsg.setChatroomName(roomName);
+		checkInMsg.setName(userName);
+		Coordinates coordinates = new DestCoordinates();
+		try {
+			coordinates.setAddress(InetAddress.getByName(ipAddr));
+			coordinates.setServicePort(port);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
+		checkInMsg.setCoordinates(coordinates);
+		sendMessage(context, service, checkInMsg);
+	}
+		
+	public static void sendLogOutMessageToRoom( Context context, IChatService service,
+			String ipAddr, int port, String roomName, String userName)
+	{
+		LocalCheckOutMessage checkOutMsg = new LocalCheckOutMessage();
+		checkOutMsg.setChatroomName(roomName);
+		checkOutMsg.setName(userName);
+		Coordinates coordinates = new DestCoordinates();
+		try {
+			coordinates.setAddress(InetAddress.getByName(ipAddr));
+			coordinates.setServicePort(port);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
+		checkOutMsg.setCoordinates(coordinates);
+		sendMessage(context, service, checkOutMsg);
 	}
 	
-	public static void sendCheckOutMessage(Context context, IChatService service, 
-			LocalCheckOutMessage checkOutMessage )
+	
+	private static void sendMessage(Context context, IChatService service, 
+			MessageInfo msg )
 	{
-		service.send(checkOutMessage);
+		service.send(msg);
 	}
+	
 }

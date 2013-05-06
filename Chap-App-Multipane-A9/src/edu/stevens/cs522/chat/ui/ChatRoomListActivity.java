@@ -38,6 +38,8 @@ import android.view.MenuItem;
  */
 public class ChatRoomListActivity extends Activity implements
 		IChatRoomManager, ISendMessage {
+	
+	static final private int REGISTER_REQUEST = 0;	
 
 	private final static String TAG = ChatRoomListActivity.class.getCanonicalName();
 	
@@ -126,7 +128,8 @@ public class ChatRoomListActivity extends Activity implements
 		switch (item.getItemId()) {
 		case (R.id.register_topic):
 			Intent registrationIntent = new Intent(this, TopicRegistrationActivity.class);
-			startActivity(registrationIntent);
+			startActivityForResult(registrationIntent, REGISTER_REQUEST);
+			//startActivity(registrationIntent);
 			return true;
 		}
 		return false;

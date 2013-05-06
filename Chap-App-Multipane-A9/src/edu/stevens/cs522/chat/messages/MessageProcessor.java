@@ -1,17 +1,13 @@
 package edu.stevens.cs522.chat.messages;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.List;
-
-import org.apache.http.conn.util.InetAddressUtils;
 
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
-import edu.stevens.cs522.chat.location.SourceCoordinates;
 import edu.stevens.cs522.chat.providers.ChatContent;
 
 public class MessageProcessor {
@@ -50,6 +46,7 @@ public class MessageProcessor {
 			}
 		}
 		
+		//@TODO Add to the peers list
 		peers.add(checkInMsg.getName());
 		ChatContent.Chatrooms.putSubscribers(values, peers);
 	}
@@ -91,16 +88,12 @@ public class MessageProcessor {
 	public void addBroadcastMsg(Service srv, MessageInfo msg) {
 		BroadcastMessage bcastMsg = (BroadcastMessage)msg;
 		
-		//addReceivedMessage(srv, msg);
-		
+		addReceivedMessage(srv, bcastMsg);
+		addSender(srv, bcastMsg);	
 	}
 	
 	public void addNewText(Service srv, MessageInfo msg) {
 		TextMessage textMsg = (TextMessage)msg;
-
-		addReceivedMessage(srv, textMsg);
-		addSender(srv, textMsg);
-		
 		pushOutMessageToPeers(srv, textMsg);
 	}
 	
@@ -152,15 +145,11 @@ public class MessageProcessor {
 						Log.e("S", ex.getStackTrace().toString() + ex.getMessage());
 					}
 				}
-
 			}
-			
 		} 
-		
-		
 	}
 	
-	private void addReceivedMessage(Service srv, TextMessage msg) {
+	private void addReceivedMessage(Service srv, BroadcastMessage msg) {
 		/*
 		 * Add sender and message to the content provider for received messages.
 		 */
@@ -179,7 +168,7 @@ public class MessageProcessor {
 		LocalPeersMessage peersMsg = (LocalPeersMessage)msg;
 	}
 	
-	private void addSender(Service srv, TextMessage msg) {
+	private void addSender(Service srv, BroadcastMessage msg) {
 
 		/*
 		 * Add sender information to content provider for peers
