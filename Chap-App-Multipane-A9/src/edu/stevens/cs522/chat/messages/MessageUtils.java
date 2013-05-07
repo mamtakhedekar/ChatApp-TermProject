@@ -3,10 +3,8 @@ package edu.stevens.cs522.chat.messages;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import edu.stevens.cs522.chat.location.Coordinates;
-import edu.stevens.cs522.chat.location.DestCoordinates;
-
 import android.content.Context;
+import edu.stevens.cs522.chat.location.DestCoordinates;
 
 public class MessageUtils {
 
@@ -34,7 +32,7 @@ public class MessageUtils {
 	{
 		TextMessage txtMsg = new TextMessage(roomName, "", textMessage);
 		txtMsg.setName(userName);
-		Coordinates coordinates = new DestCoordinates();
+		DestCoordinates coordinates = new DestCoordinates();
 		try {
 			coordinates.setAddress(InetAddress.getByName(ipAddr));
 			coordinates.setServicePort(port);
@@ -42,7 +40,7 @@ public class MessageUtils {
 			e.printStackTrace();
 		}
 		
-		txtMsg.setCoordinates(coordinates);
+		txtMsg.setDestCoordinates(coordinates);
 		sendMessage(context, service, txtMsg);
 	}
 
@@ -52,7 +50,7 @@ public class MessageUtils {
 		LocalCheckInMessage checkInMsg = new LocalCheckInMessage();
 		checkInMsg.setChatroomName(roomName);
 		checkInMsg.setName(userName);
-		Coordinates coordinates = new DestCoordinates();
+		DestCoordinates coordinates = new DestCoordinates();
 		try {
 			coordinates.setAddress(InetAddress.getByName(ipAddr));
 			coordinates.setServicePort(port);
@@ -60,7 +58,7 @@ public class MessageUtils {
 			e.printStackTrace();
 		}
 		
-		checkInMsg.setCoordinates(coordinates);
+		checkInMsg.setDestCoordinates(coordinates);
 		sendMessage(context, service, checkInMsg);
 	}
 		
@@ -70,7 +68,7 @@ public class MessageUtils {
 		LocalCheckOutMessage checkOutMsg = new LocalCheckOutMessage();
 		checkOutMsg.setChatroomName(roomName);
 		checkOutMsg.setName(userName);
-		Coordinates coordinates = new DestCoordinates();
+		DestCoordinates coordinates = new DestCoordinates();
 		try {
 			coordinates.setAddress(InetAddress.getByName(ipAddr));
 			coordinates.setServicePort(port);
@@ -78,7 +76,7 @@ public class MessageUtils {
 			e.printStackTrace();
 		}
 		
-		checkOutMsg.setCoordinates(coordinates);
+		checkOutMsg.setDestCoordinates(coordinates);
 		sendMessage(context, service, checkOutMsg);
 	}
 	

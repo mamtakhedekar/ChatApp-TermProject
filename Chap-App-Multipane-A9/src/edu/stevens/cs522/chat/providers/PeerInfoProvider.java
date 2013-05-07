@@ -37,7 +37,7 @@ public class PeerInfoProvider extends ContentProvider {
 	private final static String TAG = PeerInfoProvider.class.getCanonicalName();
 	
 	private static final String DATABASE_NAME = "chat.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 3;
 	private static final String PEER_TABLE_NAME = "peers";
 	
 	private static HashMap<String, String> peerProjectionMap;

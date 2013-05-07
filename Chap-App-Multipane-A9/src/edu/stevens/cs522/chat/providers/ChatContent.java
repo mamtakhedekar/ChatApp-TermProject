@@ -104,9 +104,17 @@ public class ChatContent {
 
 		public static final List<String> getSubscribers(Cursor c) {
 			List<String> subList = new ArrayList<String>();
-			String[] subs = c.getString(c.getColumnIndexOrThrow(SUBSCRIBERS)).split(":");
-			for (String tag : subs) {
-				subList.add(tag);
+			int index = c.getColumnIndexOrThrow(SUBSCRIBERS);
+			if (index > 0 )
+			{
+				String value = c.getString(index);
+				if ( value.contains(":"))
+				{
+					String[] subs = value.split(":");
+					for (String tag : subs) {
+						subList.add(tag);
+					}
+				}
 			}
 			return subList;
 		}
@@ -141,6 +149,10 @@ public class ChatContent {
 		
 		public static final void putSubscribers(ContentValues v, List<String> subList) {
 			String[] subs = new String[subList.size()];
+			for( int i = 0; i < subList.size(); i++)
+			{
+				subs[0] = subList.get(i);
+			}
 			putSubscribers(v, subList.toArray(subs));
 		}
 

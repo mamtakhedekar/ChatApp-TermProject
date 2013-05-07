@@ -53,7 +53,7 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 	 * The fragment argument representing the item ID that this fragment
 	 * represents.
 	 */
-	public static final String CHATROOM_ID_KEY = "chatroom_id";
+	public static String CHATROOM_ID_KEY = "chatroom_id";
 	public static final String DEFAULT_CHATROOM_ID = "MAIN";
 	static String longitude_val = "";
 	static String latitude_val = "";
@@ -74,6 +74,7 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 		/*
 		 * getArguments().getString(CHATROOM_ID_KEY) should return chatroom id.
 		 */
+		CHATROOM_ID_KEY = getArguments().getString("CHATROOM_ID_KEY");
 		longitude_val = getArguments().getString(getResources().getString(R.string.LONGITUDE));
 		latitude_val = getArguments().getString(getResources().getString(R.string.LATITUDE));
 		user_name_val = getArguments().getString(getResources().getString(R.string.UNAME));

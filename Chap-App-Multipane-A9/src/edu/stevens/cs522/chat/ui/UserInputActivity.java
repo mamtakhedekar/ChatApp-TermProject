@@ -18,8 +18,8 @@ public class UserInputActivity extends Activity {
 	private EditText latitudeText;
 	private EditText longitudeText;
 	
-	public static final String CHATROOM_ID_KEY = "chatroom_id";
-	static String CR_ID_KEY;	
+	//public static final String CHATROOM_ID_KEY = "chatroom_id";
+	//static String CR_ID_KEY;	
 	static private String UNAME = ""; 
 	static private String LONGITUDE = ""; 
 	static private String LATITUDE = "";	
@@ -28,8 +28,8 @@ public class UserInputActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_input);
-	    Intent intent = getIntent();
-	    CR_ID_KEY = intent.getStringExtra(CHATROOM_ID_KEY);		
+	    //Intent intent = getIntent();
+	    //CR_ID_KEY = intent.getStringExtra(CHATROOM_ID_KEY);		
 	}	
 	
 	@Override
@@ -59,11 +59,11 @@ public class UserInputActivity extends Activity {
 		LATITUDE = res.getString(R.string.LATITUDE);
 				
 		// Transfer user data back to chat app.
-		Intent detailIntent = new Intent(this, ChatRoomDetailActivity.class);
-		detailIntent.putExtra(ChatRoomDetailFragment.CHATROOM_ID_KEY, CR_ID_KEY);
-		detailIntent.putExtra(UNAME, user_name);
-		detailIntent.putExtra(LATITUDE, latitude);
-		detailIntent.putExtra(LONGITUDE, longitude);
-		startActivity(detailIntent);
+		Intent listIntent = new Intent(this, ChatRoomListActivity.class);
+		//detailIntent.putExtra(ChatRoomDetailFragment.CHATROOM_ID_KEY, CR_ID_KEY);
+		listIntent.putExtra(UNAME, user_name);
+		listIntent.putExtra(LATITUDE, latitude);
+		listIntent.putExtra(LONGITUDE, longitude);
+		startActivity(listIntent);
 	}	
 }

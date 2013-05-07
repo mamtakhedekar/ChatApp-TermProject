@@ -12,6 +12,8 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import edu.stevens.cs522.chat.R;
 import edu.stevens.cs522.chat.messages.ChatService;
@@ -31,6 +33,8 @@ import edu.stevens.cs522.chat.messages.MessageUtils;
 public class ChatRoomDetailActivity extends Activity implements ISendMessage {
 	
 	private static String TAG = ChatRoomDetailActivity.class.getCanonicalName();
+	
+	static final private int REGISTER_REQUEST = 1;	
 	
 	private ChatRoomDetailFragment fragment;
 	Receiver updater;
@@ -108,9 +112,19 @@ public class ChatRoomDetailActivity extends Activity implements ISendMessage {
 	 */
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+
+		// TODO: Add menu for Register
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main, menu);		
+		return true;
+	}    
+    
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
+/*		case android.R.id.home:
             // This is called when the Home (Up) button is pressed
             // in the Action Bar.
             Intent parentActivityIntent = new Intent(this, ChatRoomListActivity.class);
@@ -119,7 +133,12 @@ public class ChatRoomDetailActivity extends Activity implements ISendMessage {
                     Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(parentActivityIntent);
             finish();
-            return true;
+            return true;*/
+		case (R.id.register_topic):
+			Intent registrationIntent = new Intent(this, TopicRegistrationActivity.class);
+			startActivityForResult(registrationIntent, REGISTER_REQUEST);
+			//startActivity(registrationIntent);
+			return true;            
 		}
 		return super.onOptionsItemSelected(item);
 	}

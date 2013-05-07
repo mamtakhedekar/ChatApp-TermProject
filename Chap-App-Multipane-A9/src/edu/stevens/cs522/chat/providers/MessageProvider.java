@@ -35,8 +35,8 @@ public class MessageProvider extends ContentProvider {
 	
 	private final static String TAG = MessageProvider.class.getCanonicalName();
 
-	private static final String DATABASE_NAME = "chat.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final String DATABASE_NAME = "chat1.db";
+	private static final int DATABASE_VERSION = 3;
 	private static final String MESSAGE_TABLE_NAME = "messages";
 	
 	private static HashMap<String, String> messageProjectionMap;
@@ -163,7 +163,7 @@ public class MessageProvider extends ContentProvider {
 		}
 		
 		if (values.containsKey(ChatContent.Messages.CHATROOM) == false) {
-			values.put(ChatContent.Messages.CHATROOM, 0);
+			values.put(ChatContent.Messages.CHATROOM, " ");
 		}
 		
 		if (values.containsKey(ChatContent.Messages.OWNER_MESSAGE_ID) == false) {
@@ -171,15 +171,15 @@ public class MessageProvider extends ContentProvider {
 		}
 
 		if (values.containsKey(ChatContent.Messages.TAGS) == false) {
-			values.put(ChatContent.Messages.TAGS, 0.0);
+			values.put(ChatContent.Messages.TAGS, " ");
 		}
 		
 		if (values.containsKey(ChatContent.Messages.SENDER) == false) {
-			values.put(ChatContent.Messages.SENDER, 0.0);
+			values.put(ChatContent.Messages.SENDER, "Unknown");
 		}
 		
 		if (values.containsKey(ChatContent.Messages.MESSAGE) == false) {
-			values.put(ChatContent.Messages.MESSAGE, 0.0);
+			values.put(ChatContent.Messages.MESSAGE, " ");
 		}		
 		
 		SQLiteDatabase db = openHelper.getWritableDatabase();

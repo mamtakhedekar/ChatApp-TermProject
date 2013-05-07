@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="title_chatroom_list">Chat Room List</string>
     <string name="title_chatroom_detail">Chat Room Detail</string>
     <string name="title_topic_registration">Topic Registration</string>    
     

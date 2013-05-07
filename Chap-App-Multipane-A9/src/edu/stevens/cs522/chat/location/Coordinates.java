@@ -3,7 +3,7 @@ package edu.stevens.cs522.chat.location;
 import java.io.Serializable;
 import java.net.InetAddress;
 
-public abstract class Coordinates implements Serializable {
+public class Coordinates implements Serializable {
 
 	private static final long serialVersionUID = 3903990529302787822L;
 

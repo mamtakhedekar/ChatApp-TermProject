@@ -6,6 +6,7 @@ public class LocalCheckInMessage extends GlobalCheckInMessage {
 	
 	private String chatroomName;
 	
+	
 	public String getChatroomName() {
 		return chatroomName;
 	}
@@ -18,4 +19,8 @@ public class LocalCheckInMessage extends GlobalCheckInMessage {
 		super(MessageType.LOCAL_CHECKIN);
 	}
 
+	public LocalCheckInMessage(MessageInfo msgInfo)
+	{
+		super(MessageType.LOCAL_CHECKIN);
+	}
 }

@@ -8,13 +8,10 @@
 
 package edu.stevens.cs522.chat.messages;
 
-import java.io.Serializable;
-
-import edu.stevens.cs522.chat.location.Coordinates;
 import edu.stevens.cs522.chat.location.DestCoordinates;
 import edu.stevens.cs522.chat.location.SourceCoordinates;
 
-public abstract class MessageInfo implements Serializable {
+public class MessageInfo implements MessageInfoInterface {
 
 	private static final long serialVersionUID = -6050463241441669252L;
 	
@@ -55,22 +52,32 @@ public abstract class MessageInfo implements Serializable {
 		return messageType;
 	}
 
+	/*
 	private Coordinates coordinates;
 	
 	public Coordinates getCoordinates() {
 		return coordinates;
 	}
+	*/
+	private SourceCoordinates sourcecoordinates;
+	private DestCoordinates destinationcoordinates;
+	
 	
 	public DestCoordinates getDestCoordinates() {
-		return (DestCoordinates)coordinates;
+		return (DestCoordinates)destinationcoordinates;
 	}
 	
 	public SourceCoordinates getSourceCoordinates() {
-		return (SourceCoordinates)coordinates;
+		return (SourceCoordinates)sourcecoordinates;
+	}
+	
+	
+	public void setDestCoordinates(DestCoordinates coordinates) {
+		this.destinationcoordinates = coordinates;
 	}
 
-	public void setCoordinates(Coordinates coordinates) {
-		this.coordinates = coordinates;
+	public void setSourceCoordinates(SourceCoordinates coordinates) {
+		this.sourcecoordinates = coordinates;
 	}
 	
 	public MessageInfo(MessageType messageType) {

@@ -20,8 +20,8 @@ public class ChatroomProvider extends ContentProvider{
 
 	private final static String TAG = ChatroomProvider.class.getCanonicalName();
 
-	private static final String DATABASE_NAME = "chat.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final String DATABASE_NAME = "chat2.db";
+	private static final int DATABASE_VERSION = 3;
 	private static final String CHATROOM_TABLE_NAME = "chatrooms";
 	
 	private static HashMap<String, String> chatroomProjectionMap;
@@ -145,7 +145,7 @@ public class ChatroomProvider extends ContentProvider{
 		}
 		
 		if (values.containsKey(ChatContent.Chatrooms.OWNER) == false) {
-			values.put(ChatContent.Chatrooms.OWNER, 0);
+			values.put(ChatContent.Chatrooms.OWNER, "Unknown");
 		}
 		
 		if (values.containsKey(ChatContent.Chatrooms.MESSAGE_SEQ_ID) == false) {
@@ -153,7 +153,7 @@ public class ChatroomProvider extends ContentProvider{
 		}
 
 		if (values.containsKey(ChatContent.Chatrooms.SUBSCRIBERS) == false) {
-			values.put(ChatContent.Chatrooms.SUBSCRIBERS, 0.0);
+			values.put(ChatContent.Chatrooms.SUBSCRIBERS, " ");
 		}
 		
 		SQLiteDatabase db = openHelper.getWritableDatabase();

@@ -27,12 +27,12 @@ public class MessageProcessor {
 		String where = ChatContent.Chatrooms.NAME + "= ?";
 		String[] selectionArgs = new String[] { checkInMsg.getChatroomName() };
 
-		Cursor c = cr.query(ChatContent.Chatrooms.CONTENT_URI, projection, where,
+		Cursor c = cr.query(ChatContent.Chatrooms.CONTENT_URI, null, where,
 				selectionArgs, null);
 		if (!c.moveToFirst()) {
 			cr.insert(ChatContent.Chatrooms.CONTENT_URI, values);
 		
-		c = cr.query(ChatContent.Chatrooms.CONTENT_URI, projection, where,
+		c = cr.query(ChatContent.Chatrooms.CONTENT_URI, null, where,
 					selectionArgs, null);
 			
 		} 
@@ -46,9 +46,13 @@ public class MessageProcessor {
 			}
 		}
 		
+		ContentValues values1 = new ContentValues();
+		values1.put(ChatContent.Chatrooms._ID, ChatContent.Chatrooms.getChatroomId(c));
+		
+		peers.clear();
 		//@TODO Add to the peers list
 		peers.add(checkInMsg.getName());
-		ChatContent.Chatrooms.putSubscribers(values, peers);
+		ChatContent.Chatrooms.putSubscribers(values1, peers);
 	}
 
 	public void checkOut(Service srv, MessageInfo msg) {

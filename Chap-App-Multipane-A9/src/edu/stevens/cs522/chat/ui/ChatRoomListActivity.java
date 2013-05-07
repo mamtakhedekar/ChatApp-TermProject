@@ -13,12 +13,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 /**
  * An activity representing a list of ChatRooms. This activity has different
@@ -39,7 +41,10 @@ import android.view.MenuItem;
 public class ChatRoomListActivity extends Activity implements
 		IChatRoomManager, ISendMessage {
 	
-	static final private int REGISTER_REQUEST = 0;	
+	static final private int REGISTER_REQUEST = 0;
+	private static String user_name = "";
+	private static String user_longitude = "";
+	private static String user_latitude = "";
 
 	private final static String TAG = ChatRoomListActivity.class.getCanonicalName();
 	
@@ -56,6 +61,11 @@ public class ChatRoomListActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chatroom_list);
 		
+		Resources res = getResources();
+	    Intent parentIntent = getIntent();
+	    user_name = parentIntent.getStringExtra(res.getString(R.string.UNAME));
+	    user_longitude = parentIntent.getStringExtra(res.getString(R.string.LONGITUDE));
+	    user_latitude = parentIntent.getStringExtra(res.getString(R.string.LATITUDE));
 		
 		/*ADDED 
 		if (savedInstanceState == null) {
@@ -128,6 +138,7 @@ public class ChatRoomListActivity extends Activity implements
 		switch (item.getItemId()) {
 		case (R.id.register_topic):
 			Intent registrationIntent = new Intent(this, TopicRegistrationActivity.class);
+			registrationIntent.putExtra(getResources().getString(R.string.UNAME), user_name);
 			startActivityForResult(registrationIntent, REGISTER_REQUEST);
 			//startActivity(registrationIntent);
 			return true;
@@ -147,27 +158,26 @@ public class ChatRoomListActivity extends Activity implements
 			// In two-pane mode, show the detail view in this activity by
 			// adding or replacing the detail fragment using a
 			// fragment transaction.
-/*			Bundle arguments = new Bundle();
-			arguments.putString(ChatRoomDetailFragment.CHATROOM_ID_KEY, id);
+			Resources res = getResources();			
+			Bundle arguments = new Bundle();
+			arguments.putString(res.getString(R.string.UNAME), user_name);
+			arguments.putString(res.getString(R.string.LATITUDE), user_latitude);
+			arguments.putString(res.getString(R.string.LONGITUDE), user_longitude);
+			arguments.putString("CHATROOM_ID_KEY", id);			
+			//arguments.putString(ChatRoomDetailFragment.CHATROOM_ID_KEY, id);
 			ChatRoomDetailFragment fragment = new ChatRoomDetailFragment();
 			fragment.setArguments(arguments);
 			getFragmentManager().beginTransaction()
-					.replace(R.id.chatroom_detail_container, fragment).commit();*/
-			Bundle arguments = new Bundle();
-			arguments.putString(UserInputFragment.CHATROOM_ID_KEY, id);
-			UserInputFragment fragment = new UserInputFragment();
-			fragment.setArguments(arguments);
-			getFragmentManager().beginTransaction()
-					.replace(R.id.chatroom_detail_container, fragment).commit();			
-
+					.replace(R.id.chatroom_detail_container, fragment).commitAllowingStateLoss();//commit();
 		} else {
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
-/*			Intent detailIntent = new Intent(this, ChatRoomDetailActivity.class);
-			detailIntent.putExtra(ChatRoomDetailFragment.CHATROOM_ID_KEY, id);
-			startActivity(detailIntent);*/
-			Intent detailIntent = new Intent(this, UserInputActivity.class);
-			detailIntent.putExtra(UserInputFragment.CHATROOM_ID_KEY, id);
+			Resources res = getResources();			
+			Intent detailIntent = new Intent(this, ChatRoomDetailActivity.class);
+			detailIntent.putExtra(res.getString(R.string.UNAME), user_name);
+			detailIntent.putExtra(res.getString(R.string.LATITUDE), user_latitude);
+			detailIntent.putExtra(res.getString(R.string.LONGITUDE), user_longitude);
+			detailIntent.putExtra("CHATROOM_ID_KEY", id);
 			startActivity(detailIntent);			
 		}
 	}

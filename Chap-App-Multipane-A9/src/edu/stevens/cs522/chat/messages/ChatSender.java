@@ -5,8 +5,12 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -49,7 +53,16 @@ public class ChatSender implements Handler.Callback{
 			/*
 			 * Unmarshall the message from the handler message.
 			 */
-			MessageInfo message = (MessageInfo)contents.getSerializable(SEND_MESSAGE_KEY);
+			MessageInfoInterface message = (MessageInfoInterface)contents.getSerializable(SEND_MESSAGE_KEY);
+			/*
+			List<MessageInfoInterface> list = new ArrayList<MessageInfoInterface>() ;
+			MessageInfo msgInfo = new MessageInfo(message.getMessageType());
+			
+			list.add(msgInfo);
+			list.add(message);
+			
+			String json_string = new Gson().toJson(list);
+			*/
 			/*
 			 * Extract destination address information.
 			 */
@@ -59,13 +72,35 @@ public class ChatSender implements Handler.Callback{
 			/*
 			 * Marshall the message to JSON data.
 			 */
-			byte[] sendData = gson.toJson(message).getBytes();
+			byte[] sendData = null;
+			switch(message.getMessageType())
+			{
+			case LOCAL_CHECKIN:
+				sendData = gson.toJson(message, LocalCheckInMessage.class).getBytes();
+				break;
+			case LOCAL_CHECKOUT:
+				sendData = gson.toJson(message, LocalCheckOutMessage.class).getBytes();
+				break;
+			case TEXT:
+				sendData = gson.toJson(message, TextMessage.class).getBytes();
+				break;
+			case BROADCAST:
+				sendData = gson.toJson(message, BroadcastMessage.class).getBytes();
+			default:
+				// Dont process
+				break;
+			}
+			
+			//byte[] sendData = json_string.getBytes();
 			/*
 			 * Send the datagram packet.
 			 */
-			DatagramPacket p = new DatagramPacket(sendData, sendData.length,
-					destAddr, destPort);
-			appSocket.send(p);
+			if ( sendData != null )
+			{
+				DatagramPacket p = new DatagramPacket(sendData, sendData.length,
+						destAddr, destPort);
+				appSocket.send(p);
+			}
 
 		} catch (UnknownHostException e) {
 			Log.e(TAG,
@@ -79,7 +114,7 @@ public class ChatSender implements Handler.Callback{
 	/*
 	 * This runs on the UI thread to send a message.
 	 */
-	public void send(MessageInfo message) {
+	public void send(MessageInfoInterface message) {
 		Log.i(TAG, "Sending a message.");
 
 		Bundle contents = new Bundle();

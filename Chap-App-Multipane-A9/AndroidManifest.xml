@@ -18,13 +18,21 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ui.ChatRoomListActivity"
+            android:name=".ui.UserInputActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>        
+        <activity
+            android:name=".ui.ChatRoomListActivity"
+            android:label="@string/title_chatroom_list"
+            android:parentActivityName=".ui.UserInputActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.UserInputActivity" />            
         </activity>
         <activity
             android:name=".ui.ChatRoomDetailActivity"
@@ -44,12 +52,20 @@
         </activity>        
  
 		<provider
-            android:name="edu.stevens.cs522.chat.providers.MessageProvider_old"
+            android:name="edu.stevens.cs522.chat.providers.MessageProvider"
             android:authorities="edu.stevens.cs522.chat.service.messages"
             android:exported="false" />
         <provider
             android:name=".providers.PeerInfoProvider"
             android:authorities="edu.stevens.cs522.chat.service.peers"
+            android:exported="false" />
+        <provider
+            android:name=".providers.ChatroomProvider"
+            android:authorities="edu.stevens.cs522.chat.service.chatrooms"
+            android:exported="false" />
+		<provider
+            android:name=".providers.NotificationProvider"
+            android:authorities="edu.stevens.cs522.chat.service.notifications"
             android:exported="false" />
         
         <service 

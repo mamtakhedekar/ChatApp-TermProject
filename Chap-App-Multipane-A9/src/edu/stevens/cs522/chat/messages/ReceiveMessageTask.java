@@ -50,9 +50,9 @@ class ReceiveMessageTask extends AsyncTask<Void, MessageInfo, Void> {
 		try {
 			while (true) {
 				while (true) {
-					MessageInfo msg = getService().nextMessage();
+					MessageInfoInterface msg = getService().nextMessage();
 					ProcessReceivedMessage(msg);
-					publishProgress(msg);
+					//publishProgress(msg);
 				}
 			}
 		} catch (IOException e) {
@@ -61,24 +61,24 @@ class ReceiveMessageTask extends AsyncTask<Void, MessageInfo, Void> {
 		return ((Void) null);
 	}
 	
-	public void ProcessReceivedMessage(MessageInfo msg) {
+	public void ProcessReceivedMessage(MessageInfoInterface msg) {
 		
 		switch(msg.getMessageType())
 		{
 		case LOCAL_CHECKIN:
-			processor.checkIn(chatService, msg);
+			processor.checkIn(chatService, (LocalCheckInMessage)msg);
 			break;
 		case LOCAL_CHECKOUT:
-			processor.checkOut(chatService, msg);
+			processor.checkOut(chatService,(LocalCheckOutMessage) msg);
 			break;
 		case TEXT:
-			processor.addNewText(chatService, msg);
+			processor.addNewText(chatService, (TextMessage)msg);
 			break;
 		case BROADCAST:
-			processor.addBroadcastMsg(chatService, msg);
-			publishProgress(msg);
+			processor.addBroadcastMsg(chatService,(BroadcastMessage) msg);
+			publishProgress((BroadcastMessage)msg);
 		case LOCAL_PEERS:
-			processor.sendLocalPeers(msg);
+			processor.sendLocalPeers((LocalPeersMessage)msg);
 			break;
 		default:
 			// Dont process

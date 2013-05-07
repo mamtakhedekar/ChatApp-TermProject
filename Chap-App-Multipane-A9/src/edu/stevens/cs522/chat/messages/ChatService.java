@@ -13,6 +13,7 @@ package edu.stevens.cs522.chat.messages;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.lang.reflect.Type;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -23,9 +24,13 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Binder;
 import android.os.IBinder;
+import android.util.JsonToken;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
 import edu.stevens.cs522.chat.R;
@@ -89,7 +94,7 @@ public class ChatService extends Service implements IChatService{
 	/*
 	 * This runs on the UI thread to send a message.
 	 */
-	public void send(MessageInfo message) {
+	public void send(MessageInfoInterface message) {
 		Log.i(TAG, "Sending a message.");
 
 		sender.send(message);
@@ -149,7 +154,7 @@ public class ChatService extends Service implements IChatService{
 	/*
 	 * Executed on the background thread, to receive a chat message.
 	 */
-	MessageInfo nextMessage() throws IOException {
+	MessageInfoInterface nextMessage() throws IOException {
 		byte[] receiveData = new byte[1024];
 
 		Log.i(TAG, "Waiting for a message.");
@@ -161,24 +166,58 @@ public class ChatService extends Service implements IChatService{
 		Log.i(TAG, "Received a packet.");
 
 		InetAddress sourceIPAddress = receivePacket.getAddress();
-		Log.d(TAG, "Source IP Address: " + sourceIPAddress);
-		
 		int sourcePort = receivePacket.getPort();
+		Log.d(TAG, "Source IP Address: " + sourceIPAddress + ":" + sourcePort);
+		
+
 		JsonReader reader=new JsonReader(
 				new StringReader(new String(receivePacket.getData())));
 		reader.setLenient(true);
-		MessageInfo message=gson.fromJson(reader,MessageInfo.class);
 		
-		//MessageInfo message = gson.fromJson(new String(receivePacket.getData()), MessageInfo.class);
+		//com.google.gson.stream.JsonToken token = reader.peek();
+				
+		//Type dataType = new TypeToken<MessageInfo>() {}.getType();
+		MessageInfo message = getMessage(reader, new TypeToken<MessageInfo>() {});
 		
 		Log.d(TAG, "Received from " + message.getName());
+		JsonReader reader1=new JsonReader(
+				new StringReader(new String(receivePacket.getData())));
+		reader1.setLenient(true);
+		
+		switch(message.getMessageType())
+		{
+		case LOCAL_CHECKIN:
+			return getMessage(reader1, new TypeToken<LocalCheckInMessage>() {});
+
+		case LOCAL_CHECKOUT:
+			return getMessage(reader1, new TypeToken<LocalCheckOutMessage>() {});
+		case TEXT:
+			return getMessage(reader1, new TypeToken<TextMessage>() {});
+
+		case BROADCAST:
+			return getMessage(reader1, new TypeToken<BroadcastMessage>() {});
+		default:
+			// Dont process
+			break;
+		}
+
 		return message;
 
 	}
 
+	public <T> T getMessage(JsonReader r, TypeToken<T> typeToken){
+		  try {
+		    return gson.fromJson(r, typeToken.getType());
+		  } catch (final JsonSyntaxException e) {
+		    Log.e(TAG, "Error in Json format" + e.getMessage());
+		  } catch (final JsonParseException e) {
+		    Log.e(TAG, "Error in parsing Json" + e.getMessage());
+		  }
+		  return null;
+		}
+	
 	@Override
 	public void onDestroy() {
 		appSocket.close();
 	}
-
 }
