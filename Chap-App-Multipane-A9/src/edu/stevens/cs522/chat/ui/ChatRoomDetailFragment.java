@@ -6,11 +6,8 @@ import java.net.UnknownHostException;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
-import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -18,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -27,7 +23,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import edu.stevens.cs522.chat.R;
-import edu.stevens.cs522.chat.messages.ChatService;
 import edu.stevens.cs522.chat.providers.ChatContent;
 
 /**
@@ -192,7 +187,7 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 			String theNewMessage = message.getText().toString();
 
 			if (sender != null) {
-				sender.send(targetAddr, targetPort, theNewMessage, longitude_val, latitude_val, user_name_val);
+				sender.send(targetAddr, targetPort, theNewMessage, longitude_val, latitude_val, user_name_val, ChatRoomDetailFragment.CHATROOM_ID_KEY);
 			} else {
 				Log.e(TAG, "No sender callback registered.");
 			}
@@ -217,6 +212,10 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 		String[] projection = 
 				new String[] { ChatContent.Messages._ID,
+							   ChatContent.Messages.OWNER,
+							   ChatContent.Messages.CHATROOM,
+							   ChatContent.Messages.OWNER_MESSAGE_ID,
+							   ChatContent.Messages.TAGS,
 							   ChatContent.Messages.SENDER, 
 							   ChatContent.Messages.MESSAGE };
 		switch(LOADER_ID)
@@ -234,6 +233,10 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 		 */
 		String[] projection = 
 				new String[] { ChatContent.Messages._ID,
+				   			   ChatContent.Messages.OWNER,
+				   			   ChatContent.Messages.CHATROOM,
+				   			   ChatContent.Messages.OWNER_MESSAGE_ID,
+				   			   ChatContent.Messages.TAGS,				
 							   ChatContent.Messages.SENDER, 
 							   ChatContent.Messages.MESSAGE };
 /*		Cursor c = managedQuery(ChatContent.Messages.CONTENT_URI, 

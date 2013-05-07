@@ -9,6 +9,6 @@ import java.net.InetAddress;
  */
 public interface ISendMessage {
 
-	public void send(InetAddress addr, int port, String message, String longi, String lati, String user_name);
+	public void send(InetAddress addr, int port, String message, String longi, String lati, String user_name, String chatroom_name);
 
 }

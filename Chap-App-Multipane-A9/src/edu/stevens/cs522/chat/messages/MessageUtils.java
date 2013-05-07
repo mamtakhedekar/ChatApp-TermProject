@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 
 import android.content.Context;
 import edu.stevens.cs522.chat.location.DestCoordinates;
+import edu.stevens.cs522.chat.location.SourceCoordinates;
 
 public class MessageUtils {
 
@@ -28,18 +29,18 @@ public class MessageUtils {
 	}
 	
 	public static void sendTextMsg(Context context, IChatService service,
-			String ipAddr, int port, String roomName, String userName, String textMessage) 
+			InetAddress ipAddr, int port, String roomName, String userName, String textMessage, String longi, String lati) throws UnknownHostException 
 	{
+		double longitude = Double.parseDouble(longi);
+		double latitude = Double.parseDouble(lati);		
 		TextMessage txtMsg = new TextMessage(roomName, "", textMessage);
 		txtMsg.setName(userName);
 		DestCoordinates coordinates = new DestCoordinates();
-		try {
-			coordinates.setAddress(InetAddress.getByName(ipAddr));
-			coordinates.setServicePort(port);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		
+		coordinates.setAddress(ipAddr);//InetAddress.getByName(ipAddr));
+		coordinates.setServicePort(port);
+		SourceCoordinates sCoordinates = new SourceCoordinates();
+		sCoordinates.setLongitude(longitude);
+		sCoordinates.setLatitude(latitude);
 		txtMsg.setDestCoordinates(coordinates);
 		sendMessage(context, service, txtMsg);
 	}

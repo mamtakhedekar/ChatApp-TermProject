@@ -1,6 +1,7 @@
 package edu.stevens.cs522.chat.ui;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import edu.stevens.cs522.chat.R;
@@ -225,9 +226,15 @@ public class ChatRoomListActivity extends Activity implements
 	 * service operation for sending a message.
 	 */
 	@Override
-	public void send(InetAddress addr, int port, String message, String longi, String lati, String uname) {
+	public void send(InetAddress addr, int port, String message, String longi, String lati, String uname, String chatroom_name) {
 		Log.i(TAG, "Sending message on tablet.");
-		MessageUtils.send(this, service, addr, port, message, longi, lati, uname);		
+		MessageUtils.send(this, service, addr, port, message, longi, lati, uname);
+		try {
+			MessageUtils.sendTextMsg(this, service, addr, port, chatroom_name, uname, message, longi, lati);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

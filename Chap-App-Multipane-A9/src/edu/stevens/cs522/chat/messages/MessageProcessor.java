@@ -108,7 +108,7 @@ public class MessageProcessor {
 		values.put(ChatContent.Chatrooms.OWNER, "SELF");
 		
 		ContentResolver cr = srv.getContentResolver();
-		String[] projection = new String[] { ChatContent.Peers.NAME };
+		String[] projection = {};//new String[] { ChatContent.Peers.NAME };
 		String where = ChatContent.Chatrooms.NAME + "= ?";
 		String[] selectionArgs = new String[] { msg.getChatroomName() };
 
