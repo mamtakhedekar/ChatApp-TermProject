@@ -23,6 +23,8 @@
     <string name="server_ip">Server IP</string>
     <string name="server_port">Server Port</string>
     <string name="chatroom_name">Chatroom Name</string>
+    <string name="chatroom_ip">Chatroom IP</string>
+    <string name="chatroom_port">Chatroom Port</string>
     <string name="register_menu_label">Register</string>
     <string name="topic_register">Register for a Topic</string>
     <string name="destination_host">Destination Host</string>

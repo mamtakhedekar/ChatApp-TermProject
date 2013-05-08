@@ -3,6 +3,10 @@ package edu.stevens.cs522.chat.messages;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.stevens.cs522.chat.location.Coordinates;
+import edu.stevens.cs522.chat.location.DestCoordinates;
+import edu.stevens.cs522.chat.location.SourceCoordinates;
+
 /*
  * A text message forwarded to clients of a chatroom.  The server adds
  * a sequence number and the identity of the original sender.
@@ -65,6 +69,10 @@ public class BroadcastMessage extends MessageInfo {
 		this.seqNumber = seqNumber;
 		this.text = text;
 		this.tags = new ArrayList<String>();
+		
+		//this.setSourceCoordinates(new SourceCoordinates());
+		this.setDestCoordinates(new DestCoordinates());
+		
 	}
 
 	public BroadcastMessage(String chatSender, String chatroom, String owner, int seqNumber, String text, List<String> tags) { 

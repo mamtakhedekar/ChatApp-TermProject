@@ -66,6 +66,14 @@ public class ChatRoomListFragment extends ListFragment {
 	}
 	
 	private List<String> roomNames;
+	public List<String> getRoomNames() {
+		return roomNames;
+	}
+
+	public void setRoomNames(List<String> roomNames) {
+		this.roomNames = roomNames;
+	}
+
 	/*ADDED
 	 * Adapter for displaying chat rooms.
 	 */
@@ -129,8 +137,8 @@ public class ChatRoomListFragment extends ListFragment {
 		}
 	}
 	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
+	@Override	
+	public void onActivityCreated(Bundle savedInstanceState) {		
 		super.onActivityCreated(savedInstanceState);
 		// Call to getActivity() must wait until activity is created.
 
@@ -159,6 +167,20 @@ public class ChatRoomListFragment extends ListFragment {
 		 * End To do
 		 */
 	}
+	
+	public void onResume(Bundle savedInstanceState) {		
+		super.onResume();
+		// Call to getActivity() must wait until activity is created.
+
+		Log.d(TAG, "Resuming activity.");
+
+        roomNames = ((ChatRoomListActivity)getActivity()).getRoomNames();
+		Log.d(TAG, String.valueOf(roomNames.size()));
+	    
+	    ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(),
+	            android.R.layout.simple_list_item_1, roomNames);
+        setListAdapter(adapter1);
+	}	
 	
 	@Override
 	public void onDetach() {

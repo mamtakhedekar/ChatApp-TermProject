@@ -17,6 +17,8 @@ import java.lang.reflect.Type;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Collections;
 
 import android.app.Notification;
 import android.app.Service;
@@ -51,6 +53,8 @@ public class ChatService extends Service implements IChatService{
 
 	Notification newMessageNotification;
 	public static final int NOTIFICATION_ID = 1;
+	public String serverReceiveIP;
+	public String serverReceivePort;
 
 	/*
 	 * Socket for communication with other instances.
@@ -80,13 +84,35 @@ public class ChatService extends Service implements IChatService{
 			appSocket = new DatagramSocket(
 					Integer.parseInt(getString(R.string.app_port)));
 			
-				
+			SetServerIPPort();	
+			serverReceivePort = getString(R.string.app_port);		
 			
 		} catch (IOException e) {
 			Log.e(TAG, "Cannot create socket." + e);
 		}
 	}
-
+	
+	private void SetServerIPPort()
+	{
+		try
+		{
+			for(NetworkInterface intf : Collections.list(NetworkInterface.getNetworkInterfaces()))
+			{
+				for (InetAddress addr : Collections.list(intf.getInetAddresses()))
+				{
+					if (!addr.isLoopbackAddress())
+					{
+						serverReceiveIP = addr.getHostAddress();
+						Log.i(TAG, "MY address is : " + serverReceiveIP);
+					}
+				}
+			}
+		}
+		catch( Exception ex)
+		{
+			Log.e(TAG, "Error getting IP Address:" + ex.getLocalizedMessage());
+		}
+	}
 //	private Handler sendHandler;
 
 	private final String SEND_MESSAGE_KEY = "message";

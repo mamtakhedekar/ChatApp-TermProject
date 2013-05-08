@@ -3,12 +3,6 @@ package edu.stevens.cs522.chat.ui;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
-
-import edu.stevens.cs522.chat.R;
-import edu.stevens.cs522.chat.messages.ChatService;
-import edu.stevens.cs522.chat.messages.IChatService;
-import edu.stevens.cs522.chat.messages.MessageUtils;
-import edu.stevens.cs522.chat.rooms.Chatrooms;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -21,7 +15,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import edu.stevens.cs522.chat.R;
+import edu.stevens.cs522.chat.messages.ChatService;
+import edu.stevens.cs522.chat.messages.IChatService;
+import edu.stevens.cs522.chat.messages.MessageUtils;
+import edu.stevens.cs522.chat.rooms.Chatrooms;
 
 /**
  * An activity representing a list of ChatRooms. This activity has different
@@ -118,7 +117,7 @@ public class ChatRoomListActivity extends Activity implements
 		rooms = Chatrooms.createChatrooms();
 		
 		//@TODO move this to the action bar
-		rooms.checkAndAddRoom("PermitRoom");
+		//rooms.checkAndAddRoom("PermitRoom");
 		// To Do: If exposing deep links into your app, handle intents here.
 	}
 	
@@ -131,6 +130,31 @@ public class ChatRoomListActivity extends Activity implements
 	    inflater.inflate(R.menu.main, menu);		
 		return true;
 	}
+	
+	protected void onActivityResult(int requestCode, int resultCode,
+			Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+		switch (requestCode) {
+		case REGISTER_REQUEST:
+			switch (resultCode) {
+			case RESULT_OK:
+				String cname = intent.getStringExtra(getResources().getString(R.string.chatroom_name));
+				String cip = intent.getStringExtra(getResources().getString(R.string.chatroom_ip));
+				String cport = intent.getStringExtra(getResources().getString(R.string.chatroom_port));
+				this.rooms.checkAndAddRoom(cname, cip, Integer.parseInt(cport));
+			    ChatRoomListFragment fragment = (ChatRoomListFragment) getFragmentManager().findFragmentById(R.id.chatroom_list);
+			    fragment.setRoomNames(rooms.getRoomNames());
+			    ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(fragment.getActivity(),
+			            android.R.layout.simple_list_item_1, rooms.getRoomNames());
+		        fragment.setListAdapter(adapter1);			    
+			    //ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(fragment.getActivity(),
+			     //       android.R.layout.simple_list_item_1, rooms.getRoomNames());
+		        //fragment.setListAdapter(adapter1);
+				//fillData();
+				return;
+			}
+		}
+	}	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -164,12 +188,14 @@ public class ChatRoomListActivity extends Activity implements
 			arguments.putString(res.getString(R.string.UNAME), user_name);
 			arguments.putString(res.getString(R.string.LATITUDE), user_latitude);
 			arguments.putString(res.getString(R.string.LONGITUDE), user_longitude);
-			arguments.putString("CHATROOM_ID_KEY", id);			
+			arguments.putString("CHATROOM_ID_KEY", id);
+			arguments.putString(res.getString(R.string.chatroom_ip), rooms.getRoomForName(id).getIp());
+			arguments.putString(res.getString(R.string.chatroom_port), rooms.getRoomForName(id).getPortString());
 			//arguments.putString(ChatRoomDetailFragment.CHATROOM_ID_KEY, id);
 			ChatRoomDetailFragment fragment = new ChatRoomDetailFragment();
 			fragment.setArguments(arguments);
 			getFragmentManager().beginTransaction()
-					.replace(R.id.chatroom_detail_container, fragment).commitAllowingStateLoss();//commit();
+					.replace(R.id.chatroom_detail_container, fragment).commit();
 		} else {
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
@@ -179,6 +205,9 @@ public class ChatRoomListActivity extends Activity implements
 			detailIntent.putExtra(res.getString(R.string.LATITUDE), user_latitude);
 			detailIntent.putExtra(res.getString(R.string.LONGITUDE), user_longitude);
 			detailIntent.putExtra("CHATROOM_ID_KEY", id);
+			detailIntent.putExtra(res.getString(R.string.chatroom_ip), rooms.getRoomForName(id).getIp());
+			detailIntent.putExtra(res.getString(R.string.chatroom_port), rooms.getRoomForName(id).getPortString());
+
 			startActivity(detailIntent);			
 		}
 	}

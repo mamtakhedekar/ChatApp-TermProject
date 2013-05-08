@@ -9,16 +9,16 @@ public class Chatrooms {
 	
 	private Chatrooms() {
 		rooms = new ArrayList<Chatroom>();
-		//rooms.add(Chatroom.getDefault());
+		rooms.add(Chatroom.getDefault());
 	}
 	
-	public boolean checkAndAddRoom(String newRoomName)
+	public boolean checkAndAddRoom(String newRoomName, String p_ip, int p_port)
 	{
 		if ((findRoomInList(newRoomName))!= -1)
 		{
 			return false;
 		}
-		rooms.add(new Chatroom(newRoomName));
+		rooms.add(new Chatroom(newRoomName, p_ip, p_port));
 		return true;
 	}
 	
@@ -31,6 +31,18 @@ public class Chatrooms {
 			}
 		}
 		return -1;
+	}
+	
+	public Chatroom getRoomForName(String name)
+	{
+		int index = findRoomInList(name);
+		
+		if (index != -1 )
+		{
+			return rooms.get(index);
+		}
+		
+		return null;
 	}
 	
 	public static Chatrooms createChatrooms() {

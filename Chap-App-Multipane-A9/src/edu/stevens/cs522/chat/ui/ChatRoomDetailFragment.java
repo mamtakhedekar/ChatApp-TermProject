@@ -20,6 +20,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FilterQueryProvider;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import edu.stevens.cs522.chat.R;
@@ -110,8 +111,12 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 				container, false);
 
 		destHost = (EditText) rootView.findViewById(R.id.dest_text);
+		destHost.setText(getArguments().getString(getResources().getString(R.string.chatroom_ip)));
+		destHost.setVisibility(View.GONE);
 
 		destPort = (EditText) rootView.findViewById(R.id.port_text);
+		destPort.setText(getArguments().getString(getResources().getString(R.string.chatroom_port)));
+		destPort.setVisibility(View.GONE);
 
 		message = (EditText) rootView.findViewById(R.id.message_text);
 
@@ -135,6 +140,14 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
         msgList = (ListView) rootView.findViewById(R.id.msgList);
         msgList.setAdapter(this.messageAdapter);		
 
+        /*
+	  	messageAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+	         public Cursor runQuery(CharSequence constraint) {
+	             return dbHelper.fetchCountriesByName(constraint.toString());
+	         }
+	     });
+		messageAdapter.getFilter().filter(s.toString());
+		*/	
 		/*
 		 * End Todo
 		 */

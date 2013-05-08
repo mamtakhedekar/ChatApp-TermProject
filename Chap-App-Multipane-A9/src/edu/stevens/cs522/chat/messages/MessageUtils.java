@@ -52,14 +52,20 @@ public class MessageUtils {
 		checkInMsg.setChatroomName(roomName);
 		checkInMsg.setName(userName);
 		DestCoordinates coordinates = new DestCoordinates();
+		SourceCoordinates sourcecoordinates = new SourceCoordinates();
 		try {
 			coordinates.setAddress(InetAddress.getByName(ipAddr));
 			coordinates.setServicePort(port);
+			ChatService srv = (ChatService) service;
+
+			sourcecoordinates.setAddress( InetAddress.getByName(srv.serverReceiveIP) );
+			sourcecoordinates.setServicePort(Integer.parseInt(srv.serverReceivePort) );
+
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		
 		checkInMsg.setDestCoordinates(coordinates);
+		checkInMsg.setSourceCoordinates(sourcecoordinates);
 		sendMessage(context, service, checkInMsg);
 	}
 		

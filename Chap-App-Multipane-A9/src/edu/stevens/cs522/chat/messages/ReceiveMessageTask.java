@@ -77,6 +77,7 @@ class ReceiveMessageTask extends AsyncTask<Void, MessageInfo, Void> {
 		case BROADCAST:
 			processor.addBroadcastMsg(chatService,(BroadcastMessage) msg);
 			publishProgress((BroadcastMessage)msg);
+			break;
 		case LOCAL_PEERS:
 			processor.sendLocalPeers((LocalPeersMessage)msg);
 			break;

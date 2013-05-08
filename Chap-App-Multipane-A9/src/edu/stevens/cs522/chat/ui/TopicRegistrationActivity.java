@@ -120,6 +120,9 @@ public class TopicRegistrationActivity extends Activity{
 				ip_Addr_String, Integer.parseInt(port_String), topic_String, user_name);
 		
 		Intent callParent = getIntent();
+		callParent.putExtra(getResources().getString(R.string.chatroom_ip), ip_Addr_String);
+		callParent.putExtra(getResources().getString(R.string.chatroom_port), port_String);
+		callParent.putExtra(getResources().getString(R.string.chatroom_name), topic_String);		
 		setResult(Activity.RESULT_OK, callParent);
 		finish();
 		//return true;
