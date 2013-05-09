@@ -144,21 +144,13 @@ public class ChatRoomListFragment extends ListFragment {
 
 		Log.d(TAG, "Creating activity.");
 
-		//roomNames = chatRoomManager.getRoomNames();
         roomNames = ((ChatRoomListActivity)getActivity()).getRoomNames();
 		Log.d(TAG, String.valueOf(roomNames.size()));
 
 		/*
 		 *  TODO: replace with a list adapter for selecting a chatroom.
 		 */
-		
-/*		final ArrayList<String> list = new ArrayList<String>();
-	    for (int i = 0; i < roomNames.size(); ++i) {
-	      list.add(roomNames.get(i));
-	    }
-	    final StableArrayAdapter adapter = new StableArrayAdapter(this.getActivity(),android.R.layout.simple_list_item_1, list);
-	    //cRooms.setAdapter(adapter);
-*/	    
+			    
 	    ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(),
 	            android.R.layout.simple_list_item_1, roomNames);
         setListAdapter(adapter1);

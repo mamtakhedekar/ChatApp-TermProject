@@ -9,6 +9,7 @@ import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -95,6 +96,20 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 		 * End To do
 		 */
 	}
+	
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        
+	    Resources res = getResources();        
+        
+        if (savedInstanceState != null) {
+            // Restore last state for user name, latitude, longitude
+        	ChatRoomDetailFragment.user_name_val = savedInstanceState.getString(res.getString(R.string.UNAME));
+        	ChatRoomDetailFragment.longitude_val = savedInstanceState.getString(res.getString(R.string.LONGITUDE));
+        	ChatRoomDetailFragment.latitude_val = savedInstanceState.getString(res.getString(R.string.LATITUDE));        	
+        }        
+    }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,57 +119,65 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 	}
 
 	
-	public View loadContents(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState)
-	{
+	public View loadContents(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		
 		View rootView = inflater.inflate(R.layout.fragment_chatroom_detail,
-				container, false);
-
+		container, false);
+	
 		destHost = (EditText) rootView.findViewById(R.id.dest_text);
 		destHost.setText(getArguments().getString(getResources().getString(R.string.chatroom_ip)));
-		destHost.setVisibility(View.GONE);
-
+		destHost.setEnabled(false);
+		destHost.setFocusable(false);
+		
 		destPort = (EditText) rootView.findViewById(R.id.port_text);
 		destPort.setText(getArguments().getString(getResources().getString(R.string.chatroom_port)));
-		destPort.setVisibility(View.GONE);
-
+		destPort.setEnabled(false);
+		destPort.setFocusable(false);
+	
 		message = (EditText) rootView.findViewById(R.id.message_text);
-
+	
 		/*
-		 * TODO: Messages content provider should be linked to the listview
-		 * named "msgList" in the UI: 1. Build a cursor that projects Messages
-		 * content. 2. Use a SimpleCursorAdapter to adapt this cursor for
-		 * msgList listview. 3. Use messages_row layout for the list of messages
-		 */
-		
+		* TODO: Messages content provider should be linked to the listview
+		* named "msgList" in the UI: 1. Build a cursor that projects Messages
+		* content. 2. Use a SimpleCursorAdapter to adapt this cursor for
+		* msgList listview. 3. Use messages_row layout for the list of messages
+		*/
 		String[] to = new String[] { ChatContent.Messages.MESSAGE };
-        int[] from = new int[] { R.id.messages_message };		
-				
-        mCallbacks = this;     
+        int[] from = new int[] { R.id.messages_message };
+        mCallbacks = this;
         lm = this.getLoaderManager();//getSupportLoaderManager();
         lm.initLoader(LOADER_ID, null, mCallbacks);
         
-        this.messageAdapter = 
-        		new SimpleCursorAdapter(getActivity(), R.layout.messages_row, null, to, from, 0 );
+		String[] projection = 
+				new String[] { ChatContent.Messages._ID,
+							   ChatContent.Messages.OWNER,
+							   ChatContent.Messages.CHATROOM,
+							   ChatContent.Messages.OWNER_MESSAGE_ID,
+							   ChatContent.Messages.TAGS,
+							   ChatContent.Messages.SENDER, 
+							   ChatContent.Messages.MESSAGE };
+		
+//		String[] message_projection = new String[] {
+//		ChatContent.Messages.SENDER, ChatContent.Messages.MESSAGE };
+		String message_where = ChatContent.Messages.CHATROOM + "= ?";
+		String[] message_selectionArgs = new String[] { ChatRoomDetailFragment.CHATROOM_ID_KEY };
+	
+		Cursor peer_c =
+		getActivity().getContentResolver().query(ChatContent.Messages.CONTENT_URI, projection, message_where,
+		message_selectionArgs, null);
+	
+        this.messageAdapter = new SimpleCursorAdapter(getActivity(), R.layout.messages_row, peer_c, to, from, 0 );
         // Bind to our new adapter.
         msgList = (ListView) rootView.findViewById(R.id.msgList);
-        msgList.setAdapter(this.messageAdapter);		
-
-        /*
-	  	messageAdapter.setFilterQueryProvider(new FilterQueryProvider() {
-	         public Cursor runQuery(CharSequence constraint) {
-	             return dbHelper.fetchCountriesByName(constraint.toString());
-	         }
-	     });
-		messageAdapter.getFilter().filter(s.toString());
-		*/	
+        msgList.setAdapter(this.messageAdapter);
+	
 		/*
-		 * End Todo
-		 */
-
+		* End Todo
+		*/
+	
 		send = (Button) rootView.findViewById(R.id.send_button);
-		send.setOnClickListener(sendListener);		
-
+		send.setOnClickListener(sendListener);
+	
 		return rootView;
 	}
 	
@@ -284,8 +307,18 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 		// Inflate the menu; this adds items to the action bar if it is present.
-		inflater.inflate(R.menu.main, menu);
+		inflater.inflate(R.menu.detail_fragment, menu);
 	}
+	
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+		Resources res = getResources();        
+        outState.putString(res.getString(R.string.UNAME), ChatRoomDetailFragment.user_name_val);
+        outState.putString(res.getString(R.string.LONGITUDE), ChatRoomDetailFragment.longitude_val);
+        outState.putString(getString(R.string.LATITUDE), ChatRoomDetailFragment.latitude_val);        
+
+    }	
 	
 /*	public class Receiver extends BroadcastReceiver {
 		 

@@ -58,8 +58,6 @@ public class MessageProcessor {
 		Long ID_Long = Long.valueOf(ChatContent.Chatrooms.getChatroomId(c));
 		String[] selectionArgs1 = new String[] { ID_Long.toString() };		
 		
-		//peers.clear();
-		//@TODO Add to the peers list
 		peers.add(checkInMsg.getName());
 		ChatContent.Chatrooms.putSubscribers(values1, peers);
 		
@@ -129,7 +127,6 @@ public class MessageProcessor {
 		String[] selectionArgs1 = new String[] { ID_Long.toString() };
 
 		peers.clear();
-		//@TODO Add to the peers list
 		peers.add(checkInMsg.getName());
 		ChatContent.Chatrooms.putSubscribers(values1, peers);
 

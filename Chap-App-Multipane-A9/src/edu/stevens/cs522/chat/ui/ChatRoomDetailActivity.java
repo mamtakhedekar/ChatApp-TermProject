@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -60,9 +61,20 @@ public class ChatRoomDetailActivity extends Activity implements ISendMessage {
 		if (savedInstanceState == null) {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
+			Resources res = getResources();
 			Bundle arguments = new Bundle();
 			arguments.putString(ChatRoomDetailFragment.CHATROOM_ID_KEY, getIntent()
 					.getStringExtra(ChatRoomDetailFragment.CHATROOM_ID_KEY));
+			arguments.putString(res.getString(R.string.UNAME), getIntent()
+					.getStringExtra(res.getString(R.string.UNAME)));
+			arguments.putString(res.getString(R.string.LATITUDE), getIntent()
+					.getStringExtra(res.getString(R.string.LATITUDE)));
+			arguments.putString(res.getString(R.string.LONGITUDE), getIntent()
+					.getStringExtra(res.getString(R.string.LONGITUDE)));
+			arguments.putString(res.getString(R.string.chatroom_ip), getIntent()
+					.getStringExtra(res.getString(R.string.chatroom_ip)));
+			arguments.putString(res.getString(R.string.chatroom_port), getIntent()
+					.getStringExtra(res.getString(R.string.chatroom_port)));			
 			fragment = new ChatRoomDetailFragment();
 			fragment.setArguments(arguments);
 			getFragmentManager().beginTransaction()
@@ -118,7 +130,7 @@ public class ChatRoomDetailActivity extends Activity implements ISendMessage {
 
 		// TODO: Add menu for Register
 	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.main, menu);		
+	    inflater.inflate(R.menu.detail_fragment, menu);		
 		return true;
 	}    
     

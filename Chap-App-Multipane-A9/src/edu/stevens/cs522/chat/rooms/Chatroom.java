@@ -4,6 +4,8 @@ public class Chatroom {
 	
 	private String name;
 	private String ip;
+	private int port;
+	
 	public String getIp() {
 		return ip;
 	}
@@ -16,15 +18,14 @@ public class Chatroom {
 		return port;
 	}
 	
-	public String getPortString() {
-		return Integer.valueOf(port).toString();
-	}
+/*	public String getPortString() {
+		return String.valueOf(this.port);
+		//return Integer.valueOf(port).toString();
+	}*/
 
 	public void setPort(int port) {
 		this.port = port;
 	}
-
-	private int port;
 	
 	Chatroom(String name, String p_ip, int p_port) {
 		this.name = name;

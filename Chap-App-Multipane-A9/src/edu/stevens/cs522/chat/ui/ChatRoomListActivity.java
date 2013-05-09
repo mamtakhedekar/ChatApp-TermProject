@@ -190,7 +190,7 @@ public class ChatRoomListActivity extends Activity implements
 			arguments.putString(res.getString(R.string.LONGITUDE), user_longitude);
 			arguments.putString("CHATROOM_ID_KEY", id);
 			arguments.putString(res.getString(R.string.chatroom_ip), rooms.getRoomForName(id).getIp());
-			arguments.putString(res.getString(R.string.chatroom_port), rooms.getRoomForName(id).getPortString());
+			arguments.putString(res.getString(R.string.chatroom_port), String.valueOf(rooms.getRoomForName(id).getPort()));
 			//arguments.putString(ChatRoomDetailFragment.CHATROOM_ID_KEY, id);
 			ChatRoomDetailFragment fragment = new ChatRoomDetailFragment();
 			fragment.setArguments(arguments);
@@ -206,7 +206,7 @@ public class ChatRoomListActivity extends Activity implements
 			detailIntent.putExtra(res.getString(R.string.LONGITUDE), user_longitude);
 			detailIntent.putExtra("CHATROOM_ID_KEY", id);
 			detailIntent.putExtra(res.getString(R.string.chatroom_ip), rooms.getRoomForName(id).getIp());
-			detailIntent.putExtra(res.getString(R.string.chatroom_port), rooms.getRoomForName(id).getPortString());
+			detailIntent.putExtra(res.getString(R.string.chatroom_port), String.valueOf(rooms.getRoomForName(id).getPort()));
 
 			startActivity(detailIntent);			
 		}
@@ -285,11 +285,23 @@ public class ChatRoomListActivity extends Activity implements
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 	    // Always call the superclass so it can save the view hierarchy state
+		Resources res = getResources();
+	    savedInstanceState.putString(res.getString(R.string.UNAME), ChatRoomListActivity.user_name);
+	    savedInstanceState.putString(res.getString(R.string.LONGITUDE), ChatRoomListActivity.user_longitude);
+	    savedInstanceState.putString(getString(R.string.LATITUDE), ChatRoomListActivity.user_latitude);
+	    	
 	    super.onSaveInstanceState(savedInstanceState);
 	}
 	
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 	    // Always call the superclass so it can restore the view hierarchy
 	    super.onRestoreInstanceState(savedInstanceState);
+	    Resources res = getResources();
+	    if (savedInstanceState != null) {
+	        // Restore value of members from saved state
+	    	ChatRoomListActivity.user_name = savedInstanceState.getString(res.getString(R.string.UNAME));
+	    	ChatRoomListActivity.user_longitude = savedInstanceState.getString(res.getString(R.string.LONGITUDE));
+	    	ChatRoomListActivity.user_latitude = savedInstanceState.getString(getString(R.string.LATITUDE));	    	
+	    } 	    
 	}	
 }
